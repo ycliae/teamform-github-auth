@@ -27,6 +27,7 @@ angular.module('teamform-admin-app', ['firebase'])
 	refPath = eventName + "/admin/param";	
 	ref = firebase.database().ref(refPath);
 		
+	requireLogin();
 	// Link and sync a firebase object
 	
 	$scope.param = $firebaseObject(ref);
@@ -58,7 +59,6 @@ angular.module('teamform-admin-app', ['firebase'])
 	refPath = eventName + "/member";
 	$scope.member = [];
 	$scope.member = $firebaseArray(firebase.database().ref(refPath));
-	
 	
 
 	$scope.changeMinTeamSize = function(delta) {

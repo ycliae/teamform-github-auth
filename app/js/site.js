@@ -33,7 +33,7 @@ function initalizeFirebase() {
     apiKey: "AIzaSyDTXQFSuriwxpvJd0mZHElmLmhL8AIYmWE",
     authDomain: "teamform-15bcb.firebaseapp.com",
     databaseURL: "https://teamform-15bcb.firebaseio.com",
-    storageBucket: "teamform-15bcb.appspot.com",
+	storageBucket: "teamform-15bcb.appspot.com",
   };
   firebase.initializeApp(config);
 
@@ -48,3 +48,33 @@ function retrieveOnceFirebase(firebase, refPath, callbackFunc) {
 	firebase.database().ref(refPath).once("value").then(callbackFunc);
 }
 
+
+
+function toggleSignIn() {
+	if (!firebase.auth().currentUser) {
+		var provider = new firebase.auth.GithubAuthProvider();
+		firebase.auth().signInWithRedirect(provider);
+	}
+}
+
+function requireLogin() {
+	firebase.auth().getRedirectResult().then(function(result) {
+		if (result.credential) {
+			// This gives you a GitHub Access Token. You can use it to access the GitHub API.
+			var token = result.credential.accessToken;
+		} else {
+			toggleSignIn();
+		}
+		// The signed-in user info.
+		$scope.user = firebase.auth().currentUser;
+		console.log("Login Successfully", $scope.user);
+	}).catch(function(error) {
+		// Handle Errors here.
+		var errorCode = error.code;
+		var errorMessage = error.message;
+		// The email of the user's account used.
+		var email = error.email;
+		// The firebase.auth.AuthCredential type that was used.
+		var credential = error.credential;
+	});
+}
